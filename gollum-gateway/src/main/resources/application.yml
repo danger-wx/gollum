@@ -1,0 +1,24 @@
+server.port: 9527
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    # 服务注册
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    # 网关配置
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: payment_routh
+        uri: lb://space-payment-service
+        predicates:
+        - Path=/payment/**
+      - id: payment_routh2
+        uri: lb://space-payment-service
+        predicates:
+        - Path=/payment/ok/**

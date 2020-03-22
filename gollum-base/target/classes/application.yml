@@ -1,0 +1,21 @@
+server.port: 8001
+
+spring:
+  application:
+    name: space-payment-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-wz972e3u722f8ojsweo.mysql.rds.aliyuncs.com:3306/space_dev?useUnicode=true&characterEncoding=UTF-8
+    username: space_admin
+    password: space@123
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+management.endpoints.web.exposure.include: '*'
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sapce.entities
