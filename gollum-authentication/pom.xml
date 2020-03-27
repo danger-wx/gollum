@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gollum-base</artifactId>
+    <artifactId>gollum-authentication</artifactId>
+
 
     <dependencies>
-
         <!-- 引入 feign 的jar包 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -32,11 +32,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>2.4.0.RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
@@ -55,7 +57,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <!-- =========基础JAR包=========== -->
-
 
         <!-- 数据库相关JAR包 -->
         <dependency>
@@ -88,6 +89,19 @@
             <artifactId>hutool-all</artifactId>
             <version>5.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>8.10</version>
+        </dependency>
+
         <!-- 工具包End -->
 
         <dependency>
@@ -96,11 +110,5 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.dangerousarea.gollum</groupId>
-            <artifactId>gollum-authentication</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
-
 </project>

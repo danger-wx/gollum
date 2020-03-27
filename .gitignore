@@ -1,0 +1,12 @@
+# 忽略所有.class文件
+*.class
+*.iml
+
+/gollum-authentication/target/*
+/gollum-base/target/*
+/gollum-base/target/classes/*
+/gollum-commons/target/*
+/gollum-config/target/*
+/gollum-gateway/target/*
+/gollum-store-api/target/*
+/.idea/*

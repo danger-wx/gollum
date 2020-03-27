@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangerousarea.gollum.dao.BrandAccountMapper">
+    <resultMap id="BrandAccount" type="com.dangerousarea.gollum.domain.entities.BrandAccount">
+        <id column="id" property="id" />
+        <result column="brand_id" property="brandId" />
+        <result column="account" property="account" />
+        <result column="email" property="email" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="status" property="status" />
+        <result column="data_status" property="dataStatus" />
+        <result column="password_reset_date" property="lastPasswordResetDate" jdbcType="DATE" />
+    </resultMap>
+
+
+    <insert id="create" parameterType="com.dangerousarea.gollum.domain.entities.BrandAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into gollum_brand_account (brand_id, account, name, password, password_salt)
+        values (#{brandId}, #{account}, #{name}, #{password}, #{passwordSalt});
+    </insert>
+
+</mapper>

@@ -13,6 +13,8 @@
         <module>gollum-commons</module>
         <module>gollum-gateway</module>
         <module>gollum-store-api</module>
+        <module>gollum-config</module>
+        <module>gollum-authentication</module>
     </modules>
 
     <properties>

@@ -1,8 +1,8 @@
-server.port: 8001
+server.port: 8060
 
 spring:
   application:
-    name: gollum-base-service
+    name: gollum-authentication
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,6 +13,10 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  jackson:
+    serialization:
+      indent_output: true   #JSON格式化
+
 
 management.endpoints.web.exposure.include: '*'
 
