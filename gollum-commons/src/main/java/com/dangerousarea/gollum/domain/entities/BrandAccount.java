@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class BrandAccount extends BaseEntity {
-    private Integer brandId;
+    private Long brandId;
     private String account;
     private String email;
     private String name;

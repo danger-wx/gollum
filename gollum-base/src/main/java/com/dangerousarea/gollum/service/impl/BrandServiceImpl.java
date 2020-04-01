@@ -1,9 +1,7 @@
 package com.dangerousarea.gollum.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
 import com.dangerousarea.gollum.common.define.ContentDefine;
 import com.dangerousarea.gollum.common.exceptions.BusinessException;
 import com.dangerousarea.gollum.dao.BrandAccountMapper;
@@ -85,7 +83,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public CommonResult audit(Integer brandId, Integer status, HttpServletRequest request) {
+    public CommonResult audit(Long brandId, Integer status, HttpServletRequest request) {
         Brand brand = brandMapper.selectByPrimaryKey(brandId);
         if(ObjectUtil.isNull(brand)){
             return CommonResult.error(ErrorCodes.DATA_NOT_FOUND, "该品牌不存在");

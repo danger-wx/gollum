@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 public interface BrandMapper {
     int create(Brand record);
 
-    Brand selectByPrimaryKey(@Param("brandId") Integer brandId);
+    Brand selectByPrimaryKey(@Param("brandId") Long brandId);
 
     /**
      * 审核品牌
@@ -16,5 +16,5 @@ public interface BrandMapper {
      * @param status
      * @return
      */
-    int audit(@Param("brandId") Integer brandId, @Param("status") Integer status);
+    int audit(@Param("brandId") Long brandId, @Param("status") Integer status);
 }

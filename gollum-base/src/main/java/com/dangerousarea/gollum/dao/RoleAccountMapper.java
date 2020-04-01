@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RoleAccountMapper {
-    int create(@Param("applicationCode") String applicationCode,@Param("roleId") Integer roleId,@Param("accountId") Integer accountId);
+    int create(@Param("applicationCode") String applicationCode,@Param("roleId") Long roleId,@Param("accountId") Long accountId);
 }

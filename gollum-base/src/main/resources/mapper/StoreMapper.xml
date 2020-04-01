@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangerousarea.gollum.dao.StoreMapper">
+
+    <insert id="create" parameterType="com.dangerousarea.gollum.domain.entities.Store" useGeneratedKeys="true" keyProperty="id">
+        insert into gollum_store (`type`, brand_id, `name`, location_code, address, mobile_phone, manager, lng, lat, create_time)
+        values (#{type}, #{brandId}, #{name}, #{locationCode}, #{address} , #{mobilePhone}, #{manager}, #{lng} , #{lat}, current_timestamp);
+    </insert>
+
+    <update id="delete" parameterType="java.lang.Long">
+        update gollum_store set data_status = 0 where id = #{id};
+    </update>
+
+    <select id="selectByBrandId" resultMap="" >
+        select * from gollum_store gs where gs.brand_id = #{brandId};
+    </select>
+</mapper>

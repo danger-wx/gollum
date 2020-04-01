@@ -33,6 +33,11 @@ public class ErrorCodes {
     private static Map<Integer, String> errors=new HashMap<>();
 
     /**
+     * 表示没有错误
+     */
+    public static final int NO_ERROR = 0;
+
+    /**
      * 参数错误
      */
     public static final int PARAMETER_ERROR = 510;
@@ -65,6 +70,10 @@ public class ErrorCodes {
      * 品牌不存在
      */
     public static final int BRAND_NOT_EXISTS = 6000;
+    /**
+     * 门店不存在
+     */
+    public static final int STORE_NOT_EXISTS = 6001;
 
 
     private static void putMessages(Integer code,String message){
@@ -78,6 +87,7 @@ public class ErrorCodes {
         putMessages(ACCOUNT_NOT_EXISTS, "账号不存在");
         putMessages(ERROR_PASSWORD, "密码错误");
         putMessages(BRAND_NOT_EXISTS, "品牌不存在");
+        putMessages(STORE_NOT_EXISTS, "门店不存在");
     }
 
     public static  String getMessageByCode(int code){

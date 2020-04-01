@@ -6,7 +6,8 @@ import java.util.Date;
 
 @Data
 public class BaseEntity {
-    private Integer id;
+    private Long id;
+    private Integer dataStatus;
     private Date createTime;
     private Date updateTime;
 }

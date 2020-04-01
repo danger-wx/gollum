@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role extends BaseEntity{
+public class Theme extends BaseEntity {
     private Long brandId;
-    private String applicationCode;
+    private Long storeId;
     private String name;
-    private String description;
-    private Integer inlay;
-    private String code;
-    private Integer dataStatus;
+    private String introduction;
+    private String cover;
+    private String fullCover;
+    private Integer status;
 }
