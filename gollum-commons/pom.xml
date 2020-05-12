@@ -12,6 +12,19 @@
     <artifactId>gollum-commons</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
+        <!--   Swagger2    -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <!--   Swagger2  END  -->
+
         <!-- 工具包 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
