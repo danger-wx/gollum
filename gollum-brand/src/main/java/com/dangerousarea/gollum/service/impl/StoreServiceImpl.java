@@ -1,6 +1,10 @@
 package com.dangerousarea.gollum.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.dangerousarea.gollum.common.define.DataStatusDefine;
+import com.dangerousarea.gollum.common.define.StoreDefine;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.BrandMapper;
@@ -52,7 +56,21 @@ public class StoreServiceImpl implements StoreService {
             return CommonResult.error(ErrorCodes.STORE_NOT_EXISTS);
         }
 
-        int result = storeMapper.delete(id);
+        store.setDataStatus(DataStatusDefine.DELETE);
+        UpdateWrapper<Store> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id).eq("brand_id", brandId);
+        int result = storeMapper.update(store, updateWrapper);
+
+        if(result > 0){
+            return CommonResult.success(store);
+        }
+        return CommonResult.error(ErrorCodes.UNKNOWN_ERROR);
+    }
+
+    @Override
+    public CommonResult<Store> updateStore(Store store, HttpServletRequest request) {
+        int result = storeMapper.updateById(store);
+
         if(result > 0){
             return CommonResult.success(store);
         }
@@ -61,7 +79,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public CommonResult<List<Store>> getBrandStores(Long brandId, HttpServletRequest request) {
-        List<Store> storeList = storeMapper.selectByBrandId(brandId);
+        QueryWrapper<Store> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+                .eq("brand_id", brandId)
+                .eq("data_status", DataStatusDefine.NORMAL);
+        List<Store> storeList = storeMapper.selectList(queryWrapper);
         return CommonResult.success(storeList);
     }
 }

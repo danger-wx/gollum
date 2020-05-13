@@ -55,6 +55,18 @@ public class ErrorCodes {
      * 数据没有找到
      */
     public static final int DATA_NOT_FOUND = 550;
+    /**
+     * 添加失败
+     */
+    public static final int FAIL_TO_INSERT = 551;
+    /**
+     * 删除失败
+     */
+    public static final int FAIL_TO_DELETE = 551;
+    /**
+     * 更新失败
+     */
+    public static final int FAIL_TO_UPDATE = 552;
 
     /**
      * 账号不存在
@@ -84,6 +96,9 @@ public class ErrorCodes {
         putMessages(PARAMETER_ERROR, "参数错误");
         putMessages(UNKNOWN_ERROR, "未知错误");
         putMessages(DATA_NOT_FOUND, "数据没有找到");
+        putMessages(FAIL_TO_DELETE, "删除失败");
+        putMessages(FAIL_TO_INSERT, "插入失败");
+        putMessages(FAIL_TO_UPDATE, "更新失败");
         putMessages(ACCOUNT_NOT_EXISTS, "账号不存在");
         putMessages(ERROR_PASSWORD, "密码错误");
         putMessages(BRAND_NOT_EXISTS, "品牌不存在");

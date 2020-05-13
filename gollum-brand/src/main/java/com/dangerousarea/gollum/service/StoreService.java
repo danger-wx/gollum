@@ -17,5 +17,7 @@ public interface StoreService {
 
     CommonResult deleteStore(Long id, Long brandId, HttpServletRequest request);
 
+    CommonResult<Store> updateStore(Store store, HttpServletRequest request);
+
     CommonResult<List<Store>> getBrandStores(Long brandId, HttpServletRequest request);
 }

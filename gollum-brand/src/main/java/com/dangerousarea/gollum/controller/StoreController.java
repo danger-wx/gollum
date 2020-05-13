@@ -38,6 +38,12 @@ public class StoreController extends BaseController{
         return storeService.deleteStore(id, getLoginBrandId(), request);
     }
 
+    @ApiOperation("编辑门店信息")
+    @PutMapping
+    public CommonResult<Store> update(@RequestBody Store store){
+        return storeService.updateStore(store, request);
+    }
+
     @ApiOperation(value = "获取品牌所有门店")
     @GetMapping("/brand")
     public CommonResult<List<Store>> getBrandStores(){

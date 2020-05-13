@@ -11,7 +11,5 @@ import java.util.List;
 public interface StoreMapper extends BaseMapper<Store> {
     int create(Store store);
 
-    int delete(@Param("id") Long id);
-
     List<Store> selectByBrandId(@Param("brandId") Long brandId);
 }
