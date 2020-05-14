@@ -34,4 +34,8 @@ public abstract class BaseController {
         JwtUser account = (JwtUser) ((Authentication) request.getUserPrincipal()).getPrincipal();
         return account.getBrandId();
     }
+
+    public HttpServletRequest getRequest(){
+        return request;
+    }
 }

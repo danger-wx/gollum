@@ -32,9 +32,8 @@ public class BrandController extends BaseController{
     @ApiOperation(value = "品牌审核")
     @PutMapping("/audit")
     public CommonResult audit(@RequestBody Map<String, Object> requestBody){
-        Integer status = (Integer) requestBody.get("status");
         Long brandId = (Long) requestBody.get("brandId");
 
-        return brandService.audit(brandId, status, request);
+        return brandService.audit(brandId, request);
     }
 }

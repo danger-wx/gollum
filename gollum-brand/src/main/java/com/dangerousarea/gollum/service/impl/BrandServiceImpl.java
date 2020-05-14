@@ -2,6 +2,7 @@ package com.dangerousarea.gollum.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dangerousarea.gollum.common.define.BrandDefine;
 import com.dangerousarea.gollum.common.define.ContentDefine;
 import com.dangerousarea.gollum.common.exceptions.BusinessException;
@@ -14,8 +15,12 @@ import com.dangerousarea.gollum.dao.RoleMapper;
 import com.dangerousarea.gollum.domain.entities.Brand;
 import com.dangerousarea.gollum.domain.entities.BrandAccount;
 import com.dangerousarea.gollum.domain.entities.Role;
+import com.dangerousarea.gollum.domain.entities.RoleAccount;
 import com.dangerousarea.gollum.domain.vo.BrandVo;
+import com.dangerousarea.gollum.service.BrandAccountService;
 import com.dangerousarea.gollum.service.BrandService;
+import com.dangerousarea.gollum.service.RoleAccountService;
+import com.dangerousarea.gollum.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,14 +39,14 @@ public class BrandServiceImpl implements BrandService {
     @Resource
     private BrandMapper brandMapper;
 
-    @Resource
-    private BrandAccountMapper brandAccountMapper;
+    @Autowired
+    private BrandAccountService brandAccountService;
 
-    @Resource
-    private RoleMapper roleMapper;
+    @Autowired
+    private RoleService roleService;
 
-    @Resource
-    private RoleAccountMapper roleAccountMapper;
+    @Autowired
+    private RoleAccountService roleAccountService;
 
 
     @Override
@@ -52,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
         }
 
         brandVo.setStatus(BrandDefine.Status.REVIEW);
-        int brandResult = brandMapper.create(brand);
+        int brandResult = brandMapper.insert(brand);
         if(brandResult == 0){
             throw new BusinessException(ErrorCodes.SYSTME_ERROR, "创建品牌失败");
         }
@@ -62,8 +67,8 @@ public class BrandServiceImpl implements BrandService {
         account.setPassword(passwordEncoder.encode(brandVo.getPassword()));
         account.setName(brand.getMobilePhone());
         account.setBrandId(brandVo.getId());
-        int accountResult = brandAccountMapper.create(account);
-        if(accountResult == 0){
+        CommonResult<BrandAccount> accountResult = brandAccountService.create(account, request);
+        if(accountResult.getData() == null){
             throw new BusinessException(ErrorCodes.SYSTME_ERROR, "创建登陆账号失败");
         }
 
@@ -71,13 +76,17 @@ public class BrandServiceImpl implements BrandService {
             新品牌创建角色
          */
         Role role = new Role(brand.getId(), ContentDefine.BRAND, ContentDefine.ROLE_ADMIN_UPPER, "System admin", 0, ContentDefine.ROLE_ADMIN_UPPER, 1);
-        int roleResult = roleMapper.create(role);
-        if(roleResult == 0){
+        CommonResult<Role> roleResult = roleService.create(role, request);
+        if(roleResult.getData() == null){
             throw new BusinessException(ErrorCodes.SYSTME_ERROR, "创建默认角色失败");
         }
 
-        int roleAccountResult = roleAccountMapper.create(ContentDefine.BRAND, role.getId(), account.getId());
-        if(roleAccountResult == 0){
+        RoleAccount roleAccount = new RoleAccount();
+        roleAccount.setApplicationCode(ContentDefine.BRAND);
+        roleAccount.setRoleId(role.getId());
+        roleAccount.setAccountId(account.getId());
+        CommonResult<RoleAccount> roleAccountResult = roleAccountService.create(roleAccount, request);
+        if(roleAccountResult.getData() == null){
             throw new BusinessException(ErrorCodes.SYSTME_ERROR,"创建角色账号关联表数据失败");
         }
 
@@ -85,18 +94,23 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public CommonResult audit(Long brandId, Integer status, HttpServletRequest request) {
-        Brand brand = brandMapper.selectByPrimaryKey(brandId);
+    public CommonResult audit(Long brandId, HttpServletRequest request) {
+        Brand brand = brandMapper.selectById(brandId);
         if(ObjectUtil.isNull(brand)){
             return CommonResult.error(ErrorCodes.DATA_NOT_FOUND, "该品牌不存在");
         }
 
-        if (status.equals(brand.getStatus())) {
+        if (BrandDefine.Status.PASSED == brand.getStatus()) {
             return CommonResult.success(true);
         }
 
-        int audit = brandMapper.audit(brandId, status);
-        if (audit > 0 && BrandDefine.Status.PASSED == status){
+        UpdateWrapper<Brand> updateWrapper = new UpdateWrapper<>();
+        updateWrapper
+                .set("status", BrandDefine.Status.PASSED)
+                .eq("id", brandId);
+
+        int audit = brandMapper.update(null, updateWrapper);
+        if (audit > 0){
             return CommonResult.success(true);
         }
 
@@ -104,11 +118,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public CommonResult<List<Brand>> list() {
-        List<Brand> brands = new ArrayList<>();
-        Brand brand = brandMapper.selectByPrimaryKey(3L);
-        brands.add(brand);
-
-        return CommonResult.success(brands);
+    public Brand getBrandById(Long brandId, HttpServletRequest request) {
+        return brandMapper.selectById(brandId);
     }
 }

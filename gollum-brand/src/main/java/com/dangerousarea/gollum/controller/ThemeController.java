@@ -4,14 +4,17 @@ import com.dangerousarea.gollum.common.define.ThemeDefine;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.domain.entities.Theme;
 import com.dangerousarea.gollum.service.ThemeService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Api(tags = "主题服务")
 @RestController
 @RequestMapping("/theme")
 @Slf4j

@@ -14,7 +14,7 @@ public interface BrandService {
     CommonResult<Brand> register(BrandVo brandVo, HttpServletRequest request);
 
     @Transactional
-    CommonResult audit(Long brandId, Integer status, HttpServletRequest request);
+    CommonResult audit(Long brandId, HttpServletRequest request);
 
-    CommonResult<List<Brand>> list();
+    Brand getBrandById(Long brandId, HttpServletRequest request);
 }

@@ -6,15 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@TableName("pms_role")
-public class Role extends BaseEntity{
-    private Long brandId;
+@NoArgsConstructor
+@TableName("pms_role_account")
+public class RoleAccount extends BaseEntity{
     private String applicationCode;
-    private String name;
-    private String description;
-    private Integer inlay;
-    private String code;
-    private Integer dataStatus;
+    private Long roleId;
+    private Long accountId;
 }

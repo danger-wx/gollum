@@ -1,10 +1,12 @@
 package com.dangerousarea.gollum.domain.entities;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@TableName("gollum_brand_account")
 public class BrandAccount extends BaseEntity {
     private Long brandId;
     private String account;

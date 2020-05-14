@@ -11,7 +11,9 @@ import com.dangerousarea.gollum.dao.BrandMapper;
 import com.dangerousarea.gollum.dao.StoreMapper;
 import com.dangerousarea.gollum.domain.entities.Brand;
 import com.dangerousarea.gollum.domain.entities.Store;
+import com.dangerousarea.gollum.service.BrandService;
 import com.dangerousarea.gollum.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,8 +23,8 @@ import java.util.List;
 @Service
 public class StoreServiceImpl implements StoreService {
 
-    @Resource
-    BrandMapper brandMapper;
+    @Autowired
+    private BrandService brandService;
 
     @Resource
     StoreMapper storeMapper;
@@ -33,7 +35,7 @@ public class StoreServiceImpl implements StoreService {
             return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
         }
 
-        Brand brand = brandMapper.selectById(store.getBrandId());
+        Brand brand = brandService.getBrandById(store.getBrandId(), request);
         if(ObjectUtil.isEmpty(brand)){
             return CommonResult.error(ErrorCodes.BRAND_NOT_EXISTS);
         }

@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)  //设置跨域
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
                 .and().authorizeRequests().antMatchers(HttpMethod.GET,"/").permitAll()
-                .antMatchers("/api/auth/**","/api/verifyCode/**").permitAll()
+                .antMatchers("/api/auth/**","/api/verifyCode/**","/brand/register","/brand/audit").permitAll()
                 .antMatchers(
                         "/webjars/**",
                         "/resources/**",
