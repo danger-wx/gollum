@@ -122,7 +122,6 @@
             <groupId>com.dangerousarea.gollum</groupId>
             <artifactId>gollum-commons</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
         </dependency>
 
     </dependencies>
