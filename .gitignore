@@ -1,8 +1,10 @@
 # 忽略所有.class文件
 *.class
 *.iml
+gollum.iml
 
 /gollum-authentication/target/*
+/gollum-brand/target/*
 /gollum-base/target/*
 /gollum-base/target/classes/*
 /gollum-commons/target/*
