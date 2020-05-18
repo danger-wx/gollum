@@ -3,14 +3,12 @@ package com.dangerousarea.gollum.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dangerousarea.gollum.common.define.DataStatusDefine;
-import com.dangerousarea.gollum.common.define.StoreDefine;
 import com.dangerousarea.gollum.common.define.ThemeDefine;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.ThemeMapper;
 import com.dangerousarea.gollum.domain.entities.Theme;
 import com.dangerousarea.gollum.service.ThemeService;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

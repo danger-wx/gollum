@@ -111,20 +111,30 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <!--将这段放开，并指定入口，则打jar包，如果注释这一段，并在子项目web中将<packaging>jar</packaging>改成war,则打成war包-->
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
+        <!--<plugins>
             <plugin>
+                &lt;!&ndash; The plugin rewrites your manifest &ndash;&gt;
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
+                <configuration>&lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt;
+                    <mainClass>com.dangerousarea.gollum.BrandApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>&lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt;
+                        </goals>
+                        &lt;!&ndash;可以生成不含依赖包的不可执行Jar包&ndash;&gt;
+                        &lt;!&ndash; configuration>
+                          <classifier>exec</classifier>
+                        </configuration> &ndash;&gt;
+                    </execution>
+                </executions>
             </plugin>
-
-        </plugins>
+        </plugins>-->
     </build>
 </project>
