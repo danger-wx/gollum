@@ -126,10 +126,30 @@
     </dependencies>
 
 
-
-    <!--让多模块化拆分之后还能打成完整的可执行jar包-->
     <build>
-        <!-- 为jar包取名 -->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 指定该Main Class为全局的唯一入口 -->
+                    <mainClass>com.dangerousarea.gollum.BrandApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+<!--    &lt;!&ndash;让多模块化拆分之后还能打成完整的可执行jar包&ndash;&gt;
+    <build>
+        &lt;!&ndash; 为jar包取名 &ndash;&gt;
         <finalName>separate-demo</finalName>
         <plugins>
             <plugin>
@@ -140,6 +160,6 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>
