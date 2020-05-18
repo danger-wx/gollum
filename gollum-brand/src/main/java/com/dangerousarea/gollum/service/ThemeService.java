@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ThemeService {
+    Theme getThemeById(Long themeId);
+
     CommonResult<Theme> create(Theme theme, HttpServletRequest request);
 
     CommonResult delete(Long themeId, Long brandId, HttpServletRequest request);

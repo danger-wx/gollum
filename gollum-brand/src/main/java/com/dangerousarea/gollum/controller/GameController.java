@@ -1,5 +1,7 @@
 package com.dangerousarea.gollum.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.domain.entities.Game;
 import com.dangerousarea.gollum.service.GameService;
@@ -29,5 +31,11 @@ public class GameController extends BaseController {
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable Long id){
         return gameService.delete(id, getLoginBrandId(), getRequest());
+    }
+
+    @ApiOperation("获取当前品牌场次")
+    @GetMapping("/all")
+    public CommonResult<IPage<Game>> allGames(Page<Game> page, Game game){
+        return gameService.getBrandGames(getLoginBrandId(), page, game, getRequest());
     }
 }

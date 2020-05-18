@@ -104,4 +104,10 @@ public class ThemeServiceImpl implements ThemeService {
         }
         return CommonResult.error(ErrorCodes.UNKNOWN_ERROR);
     }
+
+    @Override
+    public Theme getThemeById(Long themeId) {
+
+        return themeMapper.selectById(themeId);
+    }
 }
