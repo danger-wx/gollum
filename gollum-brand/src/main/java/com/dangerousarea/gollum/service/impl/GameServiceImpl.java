@@ -1,6 +1,5 @@
 package com.dangerousarea.gollum.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,12 +11,10 @@ import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.GameMapper;
 import com.dangerousarea.gollum.domain.entities.Game;
 import com.dangerousarea.gollum.domain.entities.Theme;
-import com.dangerousarea.gollum.domain.search.GameSearch;
 import com.dangerousarea.gollum.service.GameService;
 import com.dangerousarea.gollum.service.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,9 +35,20 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
         }
 
         Theme theme = themeService.getThemeById(game.getThemeId());
+        if(theme == null){
+            return CommonResult.error(ErrorCodes.DATA_NOT_FOUND);
+        }
+
         if(game.getStoreId() != null && !game.getStoreId().equals(theme.getStoreId())) {
             //如果前端传入的门店Id和主题所在门店Id不同，则使用主题所在门店Id
             game.setStoreId(theme.getStoreId());
+        }
+
+        //设置场次单价
+        if(theme.getUnitPrice() != null) {
+            game.setUnitPrice(theme.getUnitPrice());
+        }else {
+            game.setUnitPrice(0d);
         }
 
         int result = gameMapper.insert(game);

@@ -75,7 +75,7 @@ public class BrandServiceImpl implements BrandService {
         /*
             新品牌创建角色
          */
-        Role role = new Role(brand.getId(), ContentDefine.BRAND, ContentDefine.ROLE_ADMIN_UPPER, "System admin", 0, ContentDefine.ROLE_ADMIN_UPPER, 1);
+        Role role = new Role(brand.getId(), ContentDefine.BRAND, ContentDefine.ADMIN_UPPER, "System admin", 0, ContentDefine.ROLE_ADMIN_UPPER, 1);
         CommonResult<Role> roleResult = roleService.create(role, request);
         if(roleResult.getData() == null){
             throw new BusinessException(ErrorCodes.SYSTME_ERROR, "创建默认角色失败");

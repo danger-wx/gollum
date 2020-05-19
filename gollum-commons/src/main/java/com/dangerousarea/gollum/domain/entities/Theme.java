@@ -14,6 +14,7 @@ public class Theme extends BaseEntity {
     private Long brandId;
     private Long storeId;
     private String name;
+    private Double unitPrice;
     private String introduction;
     private String cover;
     @TableField(exist = false)

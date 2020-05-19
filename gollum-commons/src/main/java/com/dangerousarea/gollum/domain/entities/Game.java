@@ -25,6 +25,10 @@ public class Game extends BaseEntity implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     private Integer players;
+    private Double unitPrice;
     private Double income;
+    private String payment;
     private String remarks;
+    private Long operator;
+    private Date updateTime;
 }

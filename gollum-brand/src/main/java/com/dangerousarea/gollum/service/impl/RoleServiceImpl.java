@@ -1,5 +1,6 @@
 package com.dangerousarea.gollum.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dangerousarea.gollum.common.exceptions.BusinessException;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.common.result.ErrorCodes;
@@ -12,7 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Resource
     private RoleMapper roleMapper;

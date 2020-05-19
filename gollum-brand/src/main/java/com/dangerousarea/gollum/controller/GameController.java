@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @Api(tags = "场次服务")
 @RestController
 @Slf4j
@@ -31,6 +33,14 @@ public class GameController extends BaseController {
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable Long id){
         return gameService.delete(id, getLoginBrandId(), getRequest());
+    }
+
+    @ApiOperation("编辑场次信息")
+    @PutMapping("")
+    public CommonResult eidt(@RequestBody Game game){
+        game.setOperator(getLoginUserId());
+        game.setUpdateTime(new Date());
+        return gameService.update(game, getRequest());
     }
 
     @ApiOperation("获取当前品牌场次")
