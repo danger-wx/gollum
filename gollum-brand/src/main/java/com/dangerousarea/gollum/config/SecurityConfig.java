@@ -55,9 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)  //设置跨域
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and().cors()//设置跨域
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
                 .and().authorizeRequests().antMatchers(HttpMethod.GET,"/").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/auth/**","/api/verifyCode/**","/brand/register","/brand/audit").permitAll()
                 .antMatchers(
                         "/webjars/**",
