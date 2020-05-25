@@ -11,12 +11,14 @@ import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.GameMapper;
 import com.dangerousarea.gollum.domain.entities.Game;
 import com.dangerousarea.gollum.domain.entities.Theme;
+import com.dangerousarea.gollum.domain.vo.GameVo;
 import com.dangerousarea.gollum.service.GameService;
 import com.dangerousarea.gollum.service.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Service
 public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements GameService {
@@ -64,7 +66,7 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
             return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
         }
         UpdateWrapper<Game> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("data_status", DataStatusDefine.DELETE)
+        updateWrapper.set("data_status", DataStatusDefine.DELETE).set("update_time", new Date())
                 .eq("id", id).eq("brand_id", brandId);
         int result = gameMapper.update(null, updateWrapper);
         if(result > 0){
@@ -86,7 +88,7 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
     public CommonResult<IPage<Game>> getBrandGames(Long brandId, Page<Game> page, Game game
             , HttpServletRequest request) {
         QueryWrapper<Game> wrapper = new QueryWrapper();
-        wrapper.eq("brand_id", brandId);
+        wrapper.eq("brand_id", brandId).eq("data_status", DataStatusDefine.NORMAL);
 
         if(game.getStoreId() != null)
             wrapper.eq("store_id", game.getStoreId());
@@ -98,5 +100,22 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
             wrapper.lt("end_time", game.getEndTime());
 
         return CommonResult.success(gameMapper.selectPage(page, wrapper));
+    }
+
+    @Override
+    public CommonResult<IPage<GameVo>> getBrandGameDetails(Long brandId, Page<Game> page, Game game, HttpServletRequest request) {
+        QueryWrapper<Game> wrapper = new QueryWrapper();
+        wrapper.eq("brand_id", brandId).eq("data_status", DataStatusDefine.NORMAL);
+
+        if(game.getStoreId() != null)
+            wrapper.eq("store_id", game.getStoreId());
+        if(game.getThemeId() != null)
+            wrapper.eq("theme_id", game.getThemeId());
+        if(game.getStartTime() != null)
+            wrapper.ge("start_time", game.getStartTime());
+        if(game.getEndTime() != null)
+            wrapper.lt("end_time", game.getEndTime());
+
+        return CommonResult.success(gameMapper.selectPageVo(page, wrapper));
     }
 }

@@ -45,7 +45,7 @@ public class StoreController extends BaseController{
     }
 
     @ApiOperation(value = "获取品牌所有门店")
-    @GetMapping("/brand")
+    @GetMapping("/all")
     public CommonResult<List<Store>> getBrandStores(){
         return storeService.getBrandStores(getLoginBrandId(), request);
     }

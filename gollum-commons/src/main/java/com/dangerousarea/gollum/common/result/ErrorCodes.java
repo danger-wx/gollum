@@ -59,14 +59,16 @@ public class ErrorCodes {
      * 添加失败
      */
     public static final int FAIL_TO_INSERT = 551;
-    /**
-     * 删除失败
-     */
-    public static final int FAIL_TO_DELETE = 551;
+
     /**
      * 更新失败
      */
     public static final int FAIL_TO_UPDATE = 552;
+
+    /**
+     * 删除失败
+     */
+    public static final int FAIL_TO_DELETE = 553;
 
     /**
      * 账号不存在

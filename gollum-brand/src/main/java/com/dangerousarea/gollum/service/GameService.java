@@ -7,6 +7,7 @@ import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.domain.entities.Game;
 import com.dangerousarea.gollum.domain.entities.Store;
 import com.dangerousarea.gollum.domain.search.GameSearch;
+import com.dangerousarea.gollum.domain.vo.GameVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,4 +33,5 @@ public interface GameService extends IService<Game> {
     CommonResult<Game> update(Game game, HttpServletRequest request);
 
     CommonResult<IPage<Game>> getBrandGames(Long brandId, Page<Game> page, Game game, HttpServletRequest request);
+    CommonResult<IPage<GameVo>> getBrandGameDetails(Long brandId, Page<Game> page, Game game, HttpServletRequest request);
 }
