@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 
 /**
@@ -58,7 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and().cors()//设置跨域
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
-                .and().authorizeRequests().antMatchers(HttpMethod.GET,"/").permitAll()
+                .and().authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers(HttpMethod.GET,"/").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/auth/**","/api/verifyCode/**","/brand/register","/brand/audit").permitAll()
                 .antMatchers(
