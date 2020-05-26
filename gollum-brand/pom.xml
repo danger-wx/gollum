@@ -122,7 +122,12 @@
         </dependency>
 
         <!-- 工具包End -->
-
+        <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.26</version>
+        </dependency>
     </dependencies>
 
 
@@ -145,7 +150,15 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
+
 
 <!--    &lt;!&ndash;让多模块化拆分之后还能打成完整的可执行jar包&ndash;&gt;
     <build>
