@@ -2,6 +2,7 @@ package com.dangerousarea.gollum.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dangerousarea.gollum.common.define.BrandDefine;
 import com.dangerousarea.gollum.common.define.ContentDefine;
@@ -52,8 +53,14 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public CommonResult<Brand> register(BrandVo brandVo, HttpServletRequest request) {
         Brand brand = brandVo;
-        if(StrUtil.isAllEmpty(brandVo.getPassword(), brandVo.getCountryCode(), brandVo.getName())){
+        if(StrUtil.isAllEmpty(brandVo.getPassword(), brandVo.getCountryCode(), brandVo.getName(),
+                brandVo.getMobilePhone())){
             return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
+        }
+
+        Brand exit = brandMapper.selectOne(new QueryWrapper<Brand>().eq("mobile_phone", brandVo.getMobilePhone()));
+        if(exit != null){
+            return CommonResult.error(ErrorCodes.PARAMETER_ERROR, "该账户已存在");
         }
 
         brandVo.setStatus(BrandDefine.Status.REVIEW);

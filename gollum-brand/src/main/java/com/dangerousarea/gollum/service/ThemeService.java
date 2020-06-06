@@ -1,13 +1,13 @@
 package com.dangerousarea.gollum.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.domain.entities.Theme;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public interface ThemeService {
-    Theme getThemeById(Long themeId);
+public interface ThemeService extends IService<Theme> {
 
     CommonResult<Theme> create(Theme theme, HttpServletRequest request);
 

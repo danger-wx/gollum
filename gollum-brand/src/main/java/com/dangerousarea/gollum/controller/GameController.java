@@ -43,6 +43,7 @@ public class GameController extends BaseController {
     public CommonResult eidt(@RequestBody Game game){
         game.setOperator(getLoginUserId());
         game.setUpdateTime(new Date());
+        game.setBrandId(getLoginBrandId());
         return gameService.update(game, getRequest());
     }
 

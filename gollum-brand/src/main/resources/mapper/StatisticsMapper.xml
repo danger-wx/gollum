@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangerousarea.gollum.dao.StatisticsMapper">
+
+    <select id="receptionNumber" resultType="java.lang.Integer">
+        select sum(gg.players) from gollum_game gg
+        where gg.brand_id = #{brandId}
+        <if test="startTime != null">
+            and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
+        </if>
+        <if test="endTime != null">
+            and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
+        </if>
+    </select>
+
+    <select id="income" resultType="java.lang.Double">
+        select sum(gg.income) from gollum_game gg
+        where gg.brand_id = #{brandId}
+        <if test="startTime != null">
+            and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
+        </if>
+        <if test="endTime != null">
+            and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
+        </if>
+    </select>
+</mapper>

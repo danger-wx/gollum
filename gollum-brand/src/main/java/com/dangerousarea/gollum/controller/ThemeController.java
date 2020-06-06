@@ -7,7 +7,6 @@ import com.dangerousarea.gollum.service.ThemeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +29,10 @@ public class ThemeController extends BaseController {
     @PostMapping
     public CommonResult<Theme> create(@RequestBody Theme theme){
         theme.setBrandId(getLoginBrandId());
-        //默认新加主题为下架状态
-        theme.setStatus(ThemeDefine.Status.LOWER);
+        if(theme.getStatus() == null) {
+            //设置默认状态为下架
+            theme.setStatus(ThemeDefine.Status.LOWER);
+        }
         return themeService.create(theme, request);
     }
 

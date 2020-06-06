@@ -1,12 +1,13 @@
 package com.dangerousarea.gollum.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.domain.entities.Store;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public interface StoreService {
+public interface StoreService extends IService<Store> {
     /**
      * 创建门店
      * @param store

@@ -3,6 +3,7 @@ package com.dangerousarea.gollum.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dangerousarea.gollum.common.define.DataStatusDefine;
 import com.dangerousarea.gollum.common.define.StoreDefine;
 import com.dangerousarea.gollum.common.result.CommonResult;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class StoreServiceImpl implements StoreService {
+public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
 
     @Autowired
     private BrandService brandService;

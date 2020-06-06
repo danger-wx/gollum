@@ -1,7 +1,9 @@
 package com.dangerousarea.gollum.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dangerousarea.gollum.common.define.DataStatusDefine;
 import com.dangerousarea.gollum.common.define.ThemeDefine;
 import com.dangerousarea.gollum.common.result.CommonResult;
@@ -16,13 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class ThemeServiceImpl implements ThemeService {
+public class ThemeServiceImpl extends ServiceImpl<ThemeMapper, Theme> implements ThemeService {
 
     @Resource
     private ThemeMapper themeMapper;
 
     @Override
     public CommonResult<Theme> create(Theme theme, HttpServletRequest request) {
+        if(ObjectUtil.isAllEmpty(theme.getBrandId(), theme.getStoreId(), theme.getName())){
+            return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
+        }
+
         int result = themeMapper.insert(theme);
         if(result > 0) {
             return CommonResult.success(theme);
@@ -103,11 +109,5 @@ public class ThemeServiceImpl implements ThemeService {
             return CommonResult.success(list);
         }
         return CommonResult.error(ErrorCodes.UNKNOWN_ERROR);
-    }
-
-    @Override
-    public Theme getThemeById(Long themeId) {
-
-        return themeMapper.selectById(themeId);
     }
 }

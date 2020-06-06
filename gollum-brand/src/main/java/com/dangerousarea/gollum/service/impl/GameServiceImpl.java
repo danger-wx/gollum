@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dangerousarea.gollum.common.define.DataStatusDefine;
+import com.dangerousarea.gollum.common.exceptions.BusinessException;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.GameMapper;
@@ -36,9 +37,12 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
             return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
         }
 
-        Theme theme = themeService.getThemeById(game.getThemeId());
+        gameDataCheck(game);
+
+        Theme theme = themeService.getOne(new QueryWrapper<Theme>().eq("id", game.getThemeId())
+                .eq("brand_id", game.getBrandId()));
         if(theme == null){
-            return CommonResult.error(ErrorCodes.DATA_NOT_FOUND);
+            throw new BusinessException(ErrorCodes.PARAMETER_ERROR, "数据未找到");
         }
 
         if(game.getStoreId() != null && !game.getStoreId().equals(theme.getStoreId())) {
@@ -77,6 +81,9 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
 
     @Override
     public CommonResult<Game> update(Game game, HttpServletRequest request) {
+
+        gameDataCheck(game);
+
         int result = gameMapper.updateById(game);
         if(result > 0){
             return CommonResult.success(game);
@@ -87,25 +94,22 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
     @Override
     public CommonResult<IPage<Game>> getBrandGames(Long brandId, Page<Game> page, Game game
             , HttpServletRequest request) {
-        QueryWrapper<Game> wrapper = new QueryWrapper();
-        wrapper.eq("brand_id", brandId).eq("data_status", DataStatusDefine.NORMAL);
-
-        if(game.getStoreId() != null)
-            wrapper.eq("store_id", game.getStoreId());
-        if(game.getThemeId() != null)
-            wrapper.eq("theme_id", game.getThemeId());
-        if(game.getStartTime() != null)
-            wrapper.ge("start_time", game.getStartTime());
-        if(game.getEndTime() != null)
-            wrapper.lt("end_time", game.getEndTime());
+        QueryWrapper<Game> wrapper = buildGameWrapper(brandId, game);
 
         return CommonResult.success(gameMapper.selectPage(page, wrapper));
     }
 
     @Override
     public CommonResult<IPage<GameVo>> getBrandGameDetails(Long brandId, Page<Game> page, Game game, HttpServletRequest request) {
-        QueryWrapper<Game> wrapper = new QueryWrapper();
-        wrapper.eq("brand_id", brandId).eq("data_status", DataStatusDefine.NORMAL);
+        QueryWrapper<Game> wrapper = buildGameWrapper(brandId, game);
+
+        return CommonResult.success(gameMapper.selectPageVo(page, wrapper));
+    }
+
+    private QueryWrapper<Game> buildGameWrapper(Long brandId, Game game){
+        QueryWrapper<Game> wrapper = new QueryWrapper<Game>()
+                .eq("brand_id", brandId)
+                .eq("data_status", DataStatusDefine.NORMAL);
 
         if(game.getStoreId() != null)
             wrapper.eq("store_id", game.getStoreId());
@@ -116,6 +120,12 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
         if(game.getEndTime() != null)
             wrapper.lt("end_time", game.getEndTime());
 
-        return CommonResult.success(gameMapper.selectPageVo(page, wrapper));
+        return wrapper;
+    }
+
+    private void gameDataCheck(Game game) {
+        if(game.getStartTime().after(game.getEndTime())) {
+            throw new BusinessException(ErrorCodes.PARAMETER_ERROR, "时间参数有误");
+        }
     }
 }
