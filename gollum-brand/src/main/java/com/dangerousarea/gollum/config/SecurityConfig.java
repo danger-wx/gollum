@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/v2/api-docs")
             .permitAll()
             .anyRequest().authenticated()
-            .and().cors().disable();//设置跨域
+            .and().cors();//设置跨域
 
 
         //将自定义的security filter 验证添加再密码验证之前
