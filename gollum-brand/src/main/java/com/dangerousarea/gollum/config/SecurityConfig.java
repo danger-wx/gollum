@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//          .csrf().disable()
+            .csrf().disable()   //不打开则会默认表单登陆
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
             .and().authorizeRequests()

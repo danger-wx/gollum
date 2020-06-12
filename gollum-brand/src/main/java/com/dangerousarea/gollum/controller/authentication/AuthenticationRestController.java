@@ -90,7 +90,7 @@ public class AuthenticationRestController {
         final String token = jwtTokenUtil.generateToken(userDetails);
         Map resultMap = new HashMap();
         resultMap.put("userInfo", userDetails);
-        resultMap.put("authenticate", objectMapper.writeValueAsString(authentication));
+        resultMap.put("authenticated", authentication.isAuthenticated());
         resultMap.put("token", token);
 
        /* SavedRequest savedRequest = requestCache.getRequest(request,response);
