@@ -23,4 +23,15 @@
             and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
         </if>
     </select>
+
+    <select id="game" resultType="java.lang.Integer">
+        select count(1) from gollum_game gg
+        where gg.brand_id = #{brandId}
+        <if test="startTime != null">
+            and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
+        </if>
+        <if test="endTime != null">
+            and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
+        </if>
+    </select>
 </mapper>

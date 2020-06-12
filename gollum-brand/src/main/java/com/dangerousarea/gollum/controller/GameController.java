@@ -3,9 +3,8 @@ package com.dangerousarea.gollum.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dangerousarea.gollum.common.result.CommonResult;
+import com.dangerousarea.gollum.domain.dto.GameDto;
 import com.dangerousarea.gollum.domain.entities.Game;
-import com.dangerousarea.gollum.domain.vo.GameVo;
-import com.dangerousarea.gollum.domian.JwtUser;
 import com.dangerousarea.gollum.service.GameService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +25,7 @@ public class GameController extends BaseController {
 
     @ApiOperation("创建场次")
     @PostMapping
-    public CommonResult<Game> create(@RequestBody Game game){
+    public CommonResult<GameDto> create(@RequestBody GameDto game){
         game.setBrandId(getLoginBrandId());
         game.setOperator(getLoginUserId());
         return gameService.create(game, getRequest());
@@ -55,7 +54,7 @@ public class GameController extends BaseController {
 
     @ApiOperation("获取当前品牌场次详细信息")
     @GetMapping("/detail/all")
-    public CommonResult<IPage<GameVo>> allGameDetails(Page<Game> page, Game game){
+    public CommonResult<IPage<GameDto>> allGameDetails(Page<Game> page, Game game){
         return gameService.getBrandGameDetails(getLoginBrandId(), page, game, getRequest());
     }
 }

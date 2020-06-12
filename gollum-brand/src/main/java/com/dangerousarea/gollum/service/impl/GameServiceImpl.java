@@ -10,9 +10,11 @@ import com.dangerousarea.gollum.common.exceptions.BusinessException;
 import com.dangerousarea.gollum.common.result.CommonResult;
 import com.dangerousarea.gollum.common.result.ErrorCodes;
 import com.dangerousarea.gollum.dao.GameMapper;
+import com.dangerousarea.gollum.domain.dto.GameDto;
 import com.dangerousarea.gollum.domain.entities.Game;
+import com.dangerousarea.gollum.domain.entities.GamePayment;
 import com.dangerousarea.gollum.domain.entities.Theme;
-import com.dangerousarea.gollum.domain.vo.GameVo;
+import com.dangerousarea.gollum.service.GamePaymentService;
 import com.dangerousarea.gollum.service.GameService;
 import com.dangerousarea.gollum.service.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements GameService {
@@ -30,10 +33,17 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
     @Autowired
     private ThemeService themeService;
 
+    @Autowired
+    private GamePaymentService gamePaymentService;
+
     @Override
-    public CommonResult<Game> create(Game game, HttpServletRequest request) {
+    public CommonResult<GameDto> create(GameDto game, HttpServletRequest request) {
 
         if(game.getBrandId() == null || game.getThemeId() == null){
+            return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
+        }
+
+        if(game.getPayments() == null && game.getPayments().size() == 0){
             return CommonResult.error(ErrorCodes.PARAMETER_ERROR);
         }
 
@@ -57,8 +67,20 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
             game.setUnitPrice(0d);
         }
 
+
+        List<GamePayment> payments = game.getPayments();
+        if(game.getIncome() == null){
+            //根据支付方式计算总收入
+            double income = payments.stream().mapToDouble(GamePayment::getAmount).sum();
+            game.setIncome(income);
+        }
+
         int result = gameMapper.insert(game);
         if(result > 0){
+            payments.forEach(p->{
+                p.setGameId(game.getId());
+            });
+            gamePaymentService.saveBatch(payments);
             return CommonResult.success(game);
         }
         return CommonResult.error(ErrorCodes.FAIL_TO_INSERT);
@@ -100,7 +122,7 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements Ga
     }
 
     @Override
-    public CommonResult<IPage<GameVo>> getBrandGameDetails(Long brandId, Page<Game> page, Game game, HttpServletRequest request) {
+    public CommonResult<IPage<GameDto>> getBrandGameDetails(Long brandId, Page<Game> page, Game game, HttpServletRequest request) {
         QueryWrapper<Game> wrapper = buildGameWrapper(brandId, game);
 
         return CommonResult.success(gameMapper.selectPageVo(page, wrapper));

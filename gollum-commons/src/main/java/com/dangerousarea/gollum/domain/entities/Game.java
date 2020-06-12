@@ -27,7 +27,6 @@ public class Game extends BaseEntity implements Serializable {
     private Integer players;
     private Double unitPrice;
     private Double income;
-    private String payment;
     private String remarks;
     private Long operator;
     private Date updateTime;

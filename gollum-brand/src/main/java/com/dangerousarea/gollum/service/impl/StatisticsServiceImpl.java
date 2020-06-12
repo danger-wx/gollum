@@ -51,4 +51,21 @@ public class StatisticsServiceImpl implements StatisticsService {
         result.put("dayIncome", day != null ? day : 0);
         return CommonResult.success(result);
     }
+
+    @Override
+    public CommonResult<Map> games(Long brandId, HttpServletRequest request) {
+        Integer all = statisticsMapper.games(brandId, null, null);
+        Date now = new Date();
+        Integer year = statisticsMapper.games(brandId, DateUtil.beginOfYear(now), DateUtil.endOfYear(now));
+        Integer month = statisticsMapper.games(brandId, DateUtil.beginOfMonth(now), DateUtil.endOfMonth(now));
+        Integer week = statisticsMapper.games(brandId, DateUtil.beginOfWeek(now), DateUtil.endOfWeek(now));
+        Integer day = statisticsMapper.games(brandId, DateUtil.beginOfDay(now), DateUtil.endOfDay(now));
+        Map<String, Integer> result = new HashMap<>();
+        result.put("allGames", all != null ? all : 0);
+        result.put("yearGames", year != null ? year : 0);
+        result.put("monthGames", month != null ? month : 0);
+        result.put("weekGames", week != null ? week : 0);
+        result.put("dayGames", day != null ? day : 0);
+        return CommonResult.success(result);
+    }
 }

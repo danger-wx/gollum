@@ -9,10 +9,10 @@ spring:
     url: jdbc:mysql://rm-wz972e3u722f8ojsweo.mysql.rds.aliyuncs.com:3306/gollum_dev?useUnicode=true&characterEncoding=UTF-8
     username: gollum_admin
     password: gollum@123
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
   jackson:
     serialization:
       indent_output: true   #JSON格式化

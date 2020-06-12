@@ -54,21 +54,37 @@ public class JwtUser implements UserDetails {
         return this.username;
     }
 
+    /**
+     * 账号是否过期
+     * @return
+     */
     @Override
     public boolean isAccountNonExpired() {
         return this.accountNonExpired;
     }
 
+    /**
+     * 账号是否被冻结
+     * @return
+     */
     @Override
     public boolean isAccountNonLocked() {
         return this.accountNonLocked;
     }
 
+    /**
+     * 账号密码是否过期（因为存在密码的有效期为30天的那种高级防护系统）
+     * @return
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return this.credentialsNonExpired;
     }
 
+    /**
+     * 是否可用（自定义实现）
+     * @return
+     */
     @Override
     public boolean isEnabled() {
         return this.enabled;

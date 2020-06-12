@@ -21,4 +21,12 @@ public interface StatisticsService {
      * @return
      */
     CommonResult<Map> income(Long brandId, HttpServletRequest request);
+
+    /**
+     *
+     * @param brandId
+     * @param request
+     * @return
+     */
+    CommonResult<Map> games(Long brandId, HttpServletRequest request);
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangerousarea.gollum.dao.GameMapper">
+    <resultMap id="ResultMap" type="com.dangerousarea.gollum.domain.entities.Game"/>
+    <resultMap id="RecordsCount" type="integer"/>
+    <resultMap id="themeMap" type="com.dangerousarea.gollum.domain.entities.Theme"/>
+    <resultMap id="storeMap" type="com.dangerousarea.gollum.domain.entities.Store"/>
+    <resultMap id="paymentMap" type="com.dangerousarea.gollum.domain.entities.GamePayment"/>
+    <resultMap id="ResultMapDto" type="com.dangerousarea.gollum.domain.dto.GameDto" >
+        <association property="theme" resultMap="themeMap" columnPrefix="th_" />
+        <association property="store" resultMap="storeMap" columnPrefix="st_" />
+        <collection property="payments" resultMap="paymentMap" columnPrefix="pay_" />
+    </resultMap>
+    
+    <select id="selectPageVo" resultMap="ResultMapDto,RecordsCount" resultType="java.util.List">
+        select gg.*,
+               gt.id th_id, gt.brand_id th_brand_id, gt.name th_name,
+               gs.name st_name, gs.address st_address,
+               ggp.amount pay_amount, ggp.type pay_type
+            from gollum_game gg
+            left join gollum_theme gt on gg.theme_id = gt.id
+            left join gollum_store gs on gg.store_id = gs.id
+            left join gollum_game_payment ggp on gg.id = ggp.game_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

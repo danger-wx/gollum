@@ -55,23 +55,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and().cors()//设置跨域
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
-                .and().authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers(HttpMethod.GET,"/").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/api/auth/**","/api/verifyCode/**","/brand/register","/brand/audit").permitAll()
-                .antMatchers(
-                        "/webjars/**",
-                        "/resources/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/v2/api-docs")
-                .permitAll()
-                .anyRequest().authenticated();
+        http
+//          .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不创建session
+            .and().authorizeRequests()
+            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+            .antMatchers(HttpMethod.GET,"/").permitAll()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .antMatchers("/api/auth/**","/api/verifyCode/**","/brand/register","/brand/audit").permitAll()
+            .antMatchers(
+                    "/webjars/**",
+                    "/resources/**",
+                    "/swagger-ui.html",
+                    "/swagger-resources/**",
+                    "/v2/api-docs")
+            .permitAll()
+            .anyRequest().authenticated()
+            .and().cors().disable();//设置跨域
 
 
         //将自定义的security filter 验证添加再密码验证之前

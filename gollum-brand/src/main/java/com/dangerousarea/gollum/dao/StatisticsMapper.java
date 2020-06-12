@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
-import java.util.Map;
 
 @Mapper
 public interface StatisticsMapper {
@@ -25,4 +24,13 @@ public interface StatisticsMapper {
      * @return
      */
     Double income(@Param("brandId") Long brandId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    /**
+     * 场次统计
+     * @param brandId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Integer games(@Param("brandId") Long brandId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }
