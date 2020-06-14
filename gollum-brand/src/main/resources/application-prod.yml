@@ -33,6 +33,13 @@ jwt.secret: mySecret
 jwt.expiration: 604800
 jwt.tokenHead: Bearer
 
+# 发送邮件配置
+spring.mail.host: smtp.qq.com
+spring.mail.username: 2229595828@qq.com
+spring.mail.password: snhbozigrhnreaig
+spring.mail.properties.mail.smtp.auth: true
+spring.mail.properties.mail.smtp.starttls.enable: true
+spring.mail.properties.mail.smtp.starttls.required: true
 
 #服务端版本
 version: 1.0

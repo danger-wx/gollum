@@ -1,9 +1,16 @@
 package com.dangerousarea.gollum.controller.authentication;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dangerousarea.gollum.common.define.ContentDefine;
+import com.dangerousarea.gollum.common.result.CommonResult;
+import com.dangerousarea.gollum.common.result.ErrorCodes;
+import com.dangerousarea.gollum.domain.entities.BrandAccount;
+import com.dangerousarea.gollum.domain.entities.Validate;
 import com.dangerousarea.gollum.domain.entities.validate.ValidateCode;
 import com.dangerousarea.gollum.domian.JwtUser;
+import com.dangerousarea.gollum.service.BrandAccountService;
+import com.dangerousarea.gollum.service.ValidateService;
 import com.dangerousarea.gollum.service.security.SmsCodeSender;
 import com.dangerousarea.gollum.service.security.ValidateCodeGenerator;
 import com.dangerousarea.gollum.service.impl.UserDetailsServiceImpl;
@@ -11,16 +18,19 @@ import com.dangerousarea.gollum.tool.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -37,7 +47,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Api(tags = "Gollum品牌登陆服务")
 @RestController
@@ -70,7 +82,19 @@ public class AuthenticationRestController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BrandAccountService brandAccountService;
+
+    @Autowired
+    private ValidateService validateService;
+
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     @ApiOperation(value = "登陆")
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
@@ -134,5 +158,74 @@ public class AuthenticationRestController {
         sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY,smsCode);
         String mobile = ServletRequestUtils.getRequiredStringParameter(request, "mobile");
         smsCodeSender.send(mobile, smsCode.getCode());
+    }
+
+
+    /**
+     * 发送忘记密码邮件请求，每日申请次数不超过5次，每次申请间隔不低于1分钟
+     * @param email
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "发送忘记密码邮件", notes = "发送忘记密码邮件")
+    @RequestMapping(value = "/sendValidationEmail", method = {RequestMethod.POST})
+    public CommonResult<String> sendValidationEmail(@ApiParam("邮箱地址") @RequestParam("email") String email,
+                                                    HttpServletRequest request){
+        BrandAccount account = brandAccountService.getOne(new QueryWrapper<BrandAccount>().eq("email", email));
+        if (account == null){
+            return CommonResult.error(ErrorCodes.PARAMETER_ERROR, "该邮箱所属用户不存在");
+        }else {
+            if (validateService.sendValidateLimitation(email, 5,1)){
+                // 若允许重置密码，则在gollum_validate表中插入一行数据，带有token
+                Validate validate = new Validate();
+                validateService.insertNewResetRecord(validate, account, UUID.randomUUID().toString());
+                // 设置邮件内容
+                String appUrl = request.getScheme() + "://" + request.getServerName();
+                SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
+                passwordResetEmail.setFrom(from);
+                passwordResetEmail.setTo(email);
+                passwordResetEmail.setSubject("忘记密码");
+                passwordResetEmail.setText("您正在申请重置密码，请点击此链接重置密码: \n" + appUrl + "/validate/reset?token=" + validate.getResetToken());
+                validateService.sendPasswordResetEmail(passwordResetEmail);
+                return CommonResult.success("发送成功");
+            }else {
+                return CommonResult.error(ErrorCodes.UNKNOWN_ERROR, "操作过于频繁，请稍后再试！");
+            }
+        }
+    }
+
+    /**
+     * 将url的token和数据库里的token匹配，成功后便可修改密码，token有效期为60分钟
+     * @param token
+     * @param password
+     * @param confirmPassword
+     * @return
+     */
+    @ApiOperation(value = "重置密码", notes = "重置密码")
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public CommonResult<String> resetPassword(@ApiParam("token") @RequestParam("token") String token,
+                                              @ApiParam("密码") @RequestParam("password") String password,
+                                              @ApiParam("密码确认") @RequestParam("confirmPassword") String confirmPassword){
+        // 通过token找到validate记录
+        List<Validate> validates = validateService.findUserByResetToken(token);
+        if (validates == null){
+            return CommonResult.error(ErrorCodes.DATA_NOT_FOUND, "该重置请求不存在");
+        }else {
+            Validate validate = validates.get(0);
+            if (validateService.validateLimitation(validate.getEmail(), Long.MAX_VALUE, 60, token)){
+                Long accountId = validate.getAccountId();
+                if (password.equals(confirmPassword)) {
+                    BrandAccount account = new BrandAccount();
+                    account.setId(accountId);
+                    account.setPassword(passwordEncoder.encode(password));
+                    brandAccountService.updateById(account);
+                    return CommonResult.success("修改成功");
+                }else {
+                    return CommonResult.error(ErrorCodes.PARAMETER_ERROR, "确认密码和密码不一致，请重新输入");
+                }
+            }else {
+                return CommonResult.error(ErrorCodes.FAIL_TO_UPDATE, "该链接失效");
+            }
+        }
     }
 }

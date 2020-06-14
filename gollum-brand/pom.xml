@@ -111,6 +111,12 @@
         </dependency>
         <!--   Swagger2  END  -->
 
+        <!--邮件: email-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- 数据库相关JAR包 -->
 <!--        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
