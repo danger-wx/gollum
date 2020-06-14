@@ -4,34 +4,32 @@
 
     <select id="receptionNumber" resultType="java.lang.Integer">
         select sum(gg.players) from gollum_game gg
-        where gg.brand_id = #{brandId}
-        <if test="startTime != null">
-            and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
-        </if>
-        <if test="endTime != null">
-            and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
-        </if>
+        <include refid="gameCommonWhere" />
     </select>
 
     <select id="income" resultType="java.lang.Double">
         select sum(gg.income) from gollum_game gg
-        where gg.brand_id = #{brandId}
-        <if test="startTime != null">
-            and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
-        </if>
-        <if test="endTime != null">
-            and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
-        </if>
+        <include refid="gameCommonWhere" />
     </select>
 
     <select id="game" resultType="java.lang.Integer">
         select count(1) from gollum_game gg
+        <include refid="gameCommonWhere" />
+    </select>
+
+    <sql id="gameCommonWhere">
         where gg.brand_id = #{brandId}
+        <if test="storeId != null">
+            and store_id = #{storeId}
+        </if>
+        <if test="themeId != null">
+            and theme_id = #{themeId}
+        </if>
         <if test="startTime != null">
             and unix_timestamp(gg.start_time) >= unix_timestamp(#{startTime})
         </if>
         <if test="endTime != null">
             and unix_timestamp(gg.start_time) <![CDATA[ < ]]> unix_timestamp(#{endTime});
         </if>
-    </select>
+    </sql>
 </mapper>
