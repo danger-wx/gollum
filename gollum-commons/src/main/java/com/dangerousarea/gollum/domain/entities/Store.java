@@ -1,6 +1,7 @@
 package com.dangerousarea.gollum.domain.entities;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class Store extends BaseEntity {
     @ApiModelProperty(value = "类型(暂时无用传1)")
     private Integer type;
     @ApiModelProperty(value = "品牌ID")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long brandId;
     @ApiModelProperty(value = "门店名", required = true)
     private String name;

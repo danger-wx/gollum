@@ -15,8 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @TableName("gollum_game")
 public class Game extends BaseEntity implements Serializable {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long brandId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long storeId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long themeId;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
